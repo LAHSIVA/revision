@@ -1,0 +1,48 @@
+'''
+regular_expression=str(input("Enter the regular expression"))
+print(regular expression)
+'''
+symbols=['a','b']
+operation=[]
+res=[]
+regular_expression='(a+b)*'
+for i in regular_expression:
+  if i in symbols:
+    res.append(i)
+  else:
+    operation.append(i)
+print("Resultant array is:",res)
+print("Operators used are:",operation)
+
+list1=[]
+for i in range(regular_expression.index('(')+1,regular_expression.index(')')):
+  list1.append(regular_expression[i])
+print("String in brackets:",list1)
+
+str1=''
+str1= ''.join(list1)
+print(str1)
+
+arr1=[]
+if '+' in str1:
+  arr1=str1.split('+')
+print(arr1)
+
+flag=0
+for i in range(len(operation)):
+  if operation.index(')')==len(operation)-1:
+    print("No operation after bracket")
+    flag=1
+if flag==0:
+    arr1.append(operation[operation.index(')')+1])
+    print("After adding operation array is:",arr1)
+
+string1=''
+count=0
+if '*' in arr1:
+  for k in range(10):
+    for i in range(arr1.index('*')):
+      count+=1
+      for j in range(arr1.index('*')):
+          string1+=str(arr1[i])*count+str(arr1[j]*count)+' '
+print("string is:",string1)
