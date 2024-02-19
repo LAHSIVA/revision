@@ -1,0 +1,38 @@
+tokens=[' ']
+identi=[]
+keywords=['int','string','char','float','double']
+operators=['+','-','*','/','=','<']
+punct=['(',')','{','}','[',']',',']
+
+with open("/content/symbol.txt") as res:
+  lines=res.readlines()
+  for word in lines:
+    tokens+=word.split(" ")
+
+print("id     datatype       value       rtype       noArgs      tArgs")
+
+for pos,t in enumerate(tokens):
+  for k in keywords:
+    if t==k:
+      identi.append(tokens[pos+1])
+      if(tokens[pos+2]==','):
+        print (str(tokens[pos+1]) + "     " + str(tokens[pos]) + "      " + "  NULL  " + str(tokens.insert(pos + 3,tokens[pos])))
+
+      elif(tokens[pos+2]=='('):
+        end=tokens.index(')')
+        para=tokens[pos+3:end]
+        kc=0
+        pt=[]
+        for key in keywords:
+          kc+=para.count(key)
+          i=0
+          while(i<para.count(key)):
+            pt.append(key)
+            i+=1
+        print(tokens[pos+1]+"     "+ tokens[pos]+"      "+str(kc)+"     "+ str(pt))
+
+      elif (tokens[pos-1]=='('):
+        continue
+      else:
+        print(tokens[pos+1]+"     "+tokens[pos]+"     "+tokens[pos+3])
+
