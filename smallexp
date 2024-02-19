@@ -1,0 +1,92 @@
+rcount = 1
+symbols=['e','a','b']
+re='(a|b)*'
+states={}#key : r1,r2 ,value : states 0-r1,1-r1
+rval={}#gives rval for the symbol or expression
+expressions=[]
+tables={}
+exit=False
+while re!="":
+  e=""
+  currenti=0
+  for i in range(re.index('(')+1,re.index(')')):
+    currenti=i
+    e+=re[i]
+    if re[i] in symbols:
+      if i!=re.index('(')+1:
+        expressions.append(e)
+      if re[i] not in states:
+        rvalue='r'+str(rcount)
+        states[rvalue]=[]
+        states[rvalue].append('0-r'+str(rcount))
+        states[rvalue].append('1-r'+str(rcount))
+        tables['r'+str(rcount)]={}
+        rval[re[i]]='r'+str(rcount)
+        for j,s in enumerate(states[rvalue]):
+          tables['r'+str(rcount)][s]=['-']*len(symbols)
+          if j==0:
+            tables['r'+str(rcount)][s][symbols.index(re[i])]=states[rvalue][1]
+        rcount+=1
+      if len(e)>=2:
+        rval[e]='r'+str(rcount)
+        rvalue=rval[e]
+        sepIndex=''
+        for index in range(len(e)-1,-1,-1):
+          if e[index] not in symbols:
+            sepIndex=index
+            break
+        #print('e = ',e)
+        #print('rvalue',rvalue)
+        if e[sepIndex]=='|':
+          tables[rvalue]={}
+          currtable=tables[rvalue]
+          #A=e[:e.index('|')]
+          #B=e[e.index('|')+1:]
+          A=e[:sepIndex]
+          B=e[sepIndex+1:]
+          r1=rval[A]
+          r2=rval[B]
+          currtable['0-'+rvalue]=['-']*len(symbols)
+          #print("rvall ",rvalue)
+          currtable['0-'+rvalue][0]=[states[r1][0],states[r2][0]]
+          currtable.update(tables[r1])
+          currtable['1-'+r1][0]='1-'+rvalue
+          currtable.update(tables[r2])
+          currtable['1-'+r2][0]='1-'+rvalue
+          currtable['1-'+rvalue]=['-']*len(symbols)
+          states[rvalue]=list(tables[rvalue].keys())
+
+
+        currenti=i
+        rcount+=1
+    star=False
+    if currenti+2<len(re):
+      if re[currenti+2]=='*':
+        star=True
+        r3=rval[e]
+        e='('+e+')'+'*'
+        rval[e]='r'+str(rcount)
+        rvalue=rval[e]
+        tables[rvalue]={}
+        currtable=tables[rvalue]
+        currtable['0-'+rvalue]=['-']*len(symbols)
+        currtable['0-'+rvalue][0]=[states[r3][0],'1-'+rvalue]
+        currtable.update(tables[r3])
+        currtable[states[r3][-1]][0]=[states[r3][0],'1-'+rvalue]
+        currtable['1-'+rvalue]=['-']*len(symbols)
+        states[rvalue]=list(tables[rvalue].keys())
+    else:
+      exit=True
+      break
+
+      currenti=i
+  re=re[re.index(')')+1:]
+  if '(' not in re:
+    break
+
+for key,val in tables.items():
+  print(key)
+  for k,v in val.items():
+    print(k+" : ",end="")
+    print(v)
+  print('\n\n')
