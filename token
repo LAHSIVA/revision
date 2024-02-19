@@ -1,0 +1,69 @@
+tokens=['']
+keywords=['int','string','for','float']
+operators=['+','-','*','/','=','<','>']
+punct=['(',')','{','}','[',']']
+delimiter=[';',':']
+
+
+with open("/content/token.txt") as res:
+  lines=res.readlines()
+  for word in lines:
+    tokens+=(word.split(" "))
+print(tokens)
+
+print("\n\n")
+
+kw=0
+op=0
+pun=0
+deli=0
+
+
+for k in keywords:
+  kw+=tokens.count(k)
+print("Keyword count:",kw)
+k=set(tokens).intersection((keywords))
+
+for o in operators:
+  op+=tokens.count(o)
+print("operator count:",op)
+o=set(tokens).intersection((operators))
+
+for p in punct:
+  pun+=tokens.count(p)
+print("punctuator count:",pun)
+p=set(tokens).intersection((punct))
+
+for d in delimiter:
+  deli+=tokens.count(d)
+print("Delimiters count:",deli)
+d=set(tokens).intersection((delimiter))
+
+print("\n\n")
+
+
+
+key=[]
+oper=[]
+punc=[]
+delim=[]
+
+
+
+for kk in k:
+  key.append(kk)
+print("Keywords are :",key)
+
+for oo in o:
+  oper.append(oo)
+print("operators are :",oper)
+
+for pp in p:
+  punc.append(pp)
+print("punctuators are :",punc)
+
+for dd in d:
+  delim.append(dd)
+print("Delimiters are :",delim)
+
+
